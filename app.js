@@ -9,7 +9,7 @@ const User = require('./models/User');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = 'mongodb+srv://yg2707320:AWFJ9SeRkqe57kNf@cluster0.tuvqvvh.mongodb.net/my_database?retryWrites=true&w=majority&appName=Cluster0';
+const MONGODB_URI = 'mongodb+srv://yg2707320:xD5utFhvWQ13vg5L@cluster0.w8zqidt.mongodb.net/my_database?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(MONGODB_URI, {
 //   useNewUrlParser: true,
