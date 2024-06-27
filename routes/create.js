@@ -2,14 +2,22 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
+// POST /api/create
 router.post('/', async (req, res) => {
-  try {
-    const newUser = new User(req.body);
-    await newUser.save();
-    res.status(201).send(newUser);
-  } catch (err) {
-    res.status(400).send(err);
-  }
+    try {
+        console.log('Received POST request to create user:', req.body);
+
+        const newUser = new User(req.body);
+        console.log('New user object:', newUser);
+
+        const savedUser = await newUser.save();
+        console.log('Saved user:', savedUser);
+
+        res.status(201).json(savedUser);
+    } catch (err) {
+        console.error('Error saving user:', err);
+        res.status(500).json({ error: 'Failed to save user' });
+    }
 });
 
 module.exports = router;
