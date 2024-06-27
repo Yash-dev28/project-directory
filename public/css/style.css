@@ -106,3 +106,13 @@ li {
     text-decoration: none;
     cursor: pointer;
 }
+a:hover
+{
+    text-decoration: underline;
+    text-decoration-color: #d030e9;
+}
+a{
+    color: rgb(89, 17, 89);
+    font-size: large;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
