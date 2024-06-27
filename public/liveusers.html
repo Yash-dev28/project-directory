@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Users</title>
+    <link rel="stylesheet" href="./css/style2.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>List Of Live Users</h2>
+        <ul id="userList"></ul>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            const socket = io();
+
+            function fetchUsers() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/read/users',
+                    success: function (users) {
+                        $('#userList').empty();
+                        users.forEach(user => {
+                            const status = user.isLive ? 'Live' : 'Offline';
+                            const statusClass = user.isLive ? 'live' : 'offline';
+                            $('#userList').append(`<li class="${statusClass}">${user.firstName} ${user.lastName} - ${status}</li>`);
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching users:', error);
+                    }
+                });
+            }
+
+            fetchUsers();
+
+            socket.on('userStatusUpdate', function (user) {
+                fetchUsers();
+            });
+        });
+    </script>
+    <style>
+        .live {
+            color: green;
+        }
+        .offline {
+            color: red;
+        }
+    </style>
+</body>
+</html>

@@ -106,13 +106,21 @@ li {
     text-decoration: none;
     cursor: pointer;
 }
-a:hover
-{
-    text-decoration: underline;
-    text-decoration-color: #d030e9;
-}
-a{
+
+a {
+    display: block; /* Ensure each link is on a new line */
+    width: max-content; /* Adjust width based on content */
     color: rgb(89, 17, 89);
     font-size: large;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-decoration: none; /* Remove underline */
+}
+
+a:hover {
+    background-color: #e9e9e9; /* Change background color on hover */
 }
