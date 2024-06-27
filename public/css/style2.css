@@ -1,0 +1,53 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  #liveUsersList {
+    margin-top: 20px;
+  }
+  
+  .user {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+  }
+  
+  .user p {
+    margin: 5px 0;
+  }
+  
+  .user-email, .user-socket-id {
+    color: #007bff;
+    cursor: pointer;
+  }
+  
+  .user-email:hover, .user-socket-id:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
+  

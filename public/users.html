@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Users</title>
+  <link rel="stylesheet" href="./css/style2.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/app.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Live Users</h2>
+    <div id="liveUsersList"></div>
+  </div>
+
+  <script>
+    const socket = io();
+
+    socket.on('connect', () => {
+      console.log(`Socket connected: ${socket.id}`);
+      socket.emit('joinLiveUsers');
+    });
+
+    socket.on('userJoined', user => {
+      console.log('User joined:', user);
+      $('#liveUsersList').append(`
+        <div class="user">
+          <p><strong>Email:</strong> <span class="user-email">${user.email}</span></p>
+          <p><strong>Name:</strong> ${user.name}</p>
+          <p><strong>Socket ID:</strong> <span class="user-socket-id">${user.socketId}</span></p>
+        </div>
+      `);
+    });
+
+    socket.on('disconnect', () => {
+      console.log(`Socket disconnected: ${socket.id}`);
+    });
+
+    // Example: Handle click on user email or socket ID to fetch details
+    $(document).on('click', '.user-email, .user-socket-id', function() {
+      const identifier = $(this).text();
+      // Call your API to fetch user details based on identifier
+      // Example: $.ajax({...});
+      alert('Implement AJAX call to fetch user details');
+    });
+  </script>
+</body>
+</html>
