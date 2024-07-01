@@ -54,7 +54,9 @@ const UserSchema = new Schema({
     isLive: {
         type: Boolean,
         default: false
-    }
+    },
+    socketId: String // Add socket ID field
 });
+
 
 module.exports = mongoose.model('User', UserSchema);

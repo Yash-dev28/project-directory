@@ -9,6 +9,15 @@
 </head>
 <body>
     <div class="container">
+        <h2>Join Live Users Room</h2>
+        <form id="joinRoomForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <button type="submit">Join Room</button>
+        </form>
+
         <h2>List Of Live Users</h2>
         <ul id="userList"></ul>
     </div>
@@ -17,38 +26,37 @@
         $(document).ready(function () {
             const socket = io();
 
-            function fetchUsers() {
+            $('#joinRoomForm').submit(function (e) {
+                e.preventDefault();
+
+                const email = $('#email').val();
+                const password = $('#password').val();
+
+                socket.emit('joinRoom', { email, password });
+            });
+
+            socket.on('userJoined', user => {
+                $('#userList').append(`
+                    <li>
+                        <span class="user-email">${user.email}</span> - ${user.name} - <span class="user-socket-id">${user.socketId}</span>
+                    </li>
+                `);
+            });
+
+            $(document).on('click', '.user-email, .user-socket-id', function () {
+                const identifier = $(this).text();
                 $.ajax({
                     type: 'GET',
-                    url: '/api/read/users',
-                    success: function (users) {
-                        $('#userList').empty();
-                        users.forEach(user => {
-                            const status = user.isLive ? 'Live' : 'Offline';
-                            const statusClass = user.isLive ? 'live' : 'offline';
-                            $('#userList').append(`<li class="${statusClass}">${user.firstName} ${user.lastName} - ${status}</li>`);
-                        });
+                    url: '/api/read/user/' + identifier,
+                    success: function (user) {
+                        alert(`User details:\n\nEmail: ${user.email}\nName: ${user.firstName} ${user.lastName}\nMobile: ${user.mobileNo}\nAddress: ${user.address.street}, ${user.address.city}, ${user.address.state}, ${user.address.country}\nLogin ID: ${user.loginId}`);
                     },
                     error: function (error) {
-                        console.error('Error fetching users:', error);
+                        console.error('Error fetching user details:', error);
                     }
                 });
-            }
-
-            fetchUsers();
-
-            socket.on('userStatusUpdate', function (user) {
-                fetchUsers();
             });
         });
     </script>
-    <style>
-        .live {
-            color: green;
-        }
-        .offline {
-            color: red;
-        }
-    </style>
 </body>
 </html>

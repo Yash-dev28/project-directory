@@ -33,25 +33,41 @@ const io = socketIo(server);
 io.on('connection', socket => {
     console.log(`Socket connected: ${socket.id}`);
 
-    socket.on('joinLiveUsers', async () => {
+    socket.on('joinRoom', async ({ email, password }) => {
         try {
-            const users = await User.find();
-            users.forEach(user => {
+            const user = await User.findOne({ email });
+
+            if (user && user.password === password) { // Ideally, you should hash the password and compare
                 socket.join('live users');
+                user.isLive = true;
+                await user.save();
+
                 io.to('live users').emit('userJoined', {
                     email: user.email,
                     name: `${user.firstName} ${user.lastName}`,
                     socketId: socket.id
                 });
-            });
+            } else {
+                socket.emit('authError', 'Invalid email or password');
+            }
         } catch (err) {
-            console.error('Error joining live users:', err);
+            console.error('Error joining room:', err);
         }
     });
 
-    //socket.on('disconnect', () => {
-    //    console.log(`Socket disconnected: ${socket.id}`);
-    //});
+    socket.on('disconnect', async () => {
+        try {
+            const user = await User.findOneAndUpdate(
+                { socketId: socket.id },
+                { isLive: false }
+            );
+            if (user) {
+                socket.leave('live users');
+            }
+        } catch (err) {
+            console.error('Error updating user status:', err);
+        }
+    });
 });
 
 server.listen(PORT, () => {
